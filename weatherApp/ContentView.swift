@@ -8,6 +8,23 @@
 import SwiftUI
 
 
+struct Weather: Identifiable{
+    var id = UUID()
+    var dayOfWeek : String
+    var imageName: String
+    var tempereture : Int
+}
+
+struct data  {
+    static let weekdata = [
+        
+        Weather (dayOfWeek: "TUE", imageName: "cloud.sun.fill", tempereture: 76),
+        Weather(dayOfWeek: "WD", imageName: "sun.max.fill", tempereture: 88),
+        Weather(dayOfWeek: "THU", imageName: "cloud.drizzle.fill", tempereture: 60),
+        Weather(dayOfWeek: "FRI", imageName: "cloud.sun.fill", tempereture: 72),
+        Weather(dayOfWeek: "SAT", imageName: "moon.stars.fill", tempereture: 30),
+    ]
+}
 
 
 struct ContentView: View {
@@ -15,7 +32,9 @@ struct ContentView: View {
     @State private var isNight = false
     
     
-    var weekWeatherData :[String: String
+    var weathers: [Weather] = data.weekdata
+
+    
     
     var body: some View {
         ZStack{
@@ -27,27 +46,36 @@ struct ContentView: View {
                 
                 
                 MainWeatherView(imageName:  isNight ? "moon.stars.fill":  "cloud.sun.fill", temperature: 76)
-                
-                HStack(spacing: 20){
-                    WeatherDayView(dayOfWeek: "TUE", imageName: "cloud.sun.fill", tempereture: 76)
-                    WeatherDayView(dayOfWeek: "WD", imageName: "sun.max.fill", tempereture: 88)
-                    
-                    WeatherDayView(dayOfWeek: "THU", imageName: "cloud.drizzle.fill", tempereture: 60)
-                    
-                    WeatherDayView(dayOfWeek: "FRI", imageName: "cloud.sun.fill", tempereture: 72)
-                    
-                    WeatherDayView(dayOfWeek: "SAT", imageName: "moon.stars.fill", tempereture: 30)
-                    
+            
+                Spacer()
+                ScrollView {
+                            LazyHStack {
+                                ForEach(weathers, id: \.id) { data in
+                                    WeatherDayView(dayOfWeek: data.dayOfWeek, imageName: data.imageName, tempereture: data.tempereture)
+
+                                }
+                            }
                 }
-                Spacer() // yazının altında kalan kısmı boşluk olarak atar
+                .frame( height: 110)
+                
+
+
+    
+                
+//
+//                    WeatherDayView(dayOfWeek: "TUE", imageName: "cloud.sun.fill", tempereture: 76)
+//
+//                    WeatherDayView(dayOfWeek: "TUE", imageName: "cloud.sun.fill", tempereture: 76)
+
+                
+
+           Spacer() // yazının altında kalan kısmı boşluk olarak atar
                 
                 Button {
 //                    print("tapped")
                     isNight.toggle()
                 } label: {
                     WeatherButton(buttonText: "Change the Daytime", backgroundColor: .white, textColor: .blue)
-                    
-                    
                 }
                 Spacer()
 
